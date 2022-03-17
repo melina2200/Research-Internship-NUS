@@ -1,0 +1,369 @@
+{
+    "%0": {
+        "shape": "(1, 97, 97, 1)",
+        "dim1": 1,
+        "dim2": 97,
+        "dim3": 97,
+        "dim4": 1
+    },
+    "%19": {
+        "shape": "(1, 50, 50, 8)",
+        "dim1": 1,
+        "dim2": 50,
+        "dim3": 50,
+        "dim4": 8
+    },
+    "%56": {
+        "shape": "(1, 49, 49, 16)",
+        "dim1": 1,
+        "dim2": 49,
+        "dim3": 49,
+        "dim4": 16
+    },
+    "%93": {
+        "shape": "(1, 26, 26, 32)",
+        "dim1": 1,
+        "dim2": 26,
+        "dim3": 26,
+        "dim4": 32
+    },
+    "%130": {
+        "shape": "(1, 25, 25, 32)",
+        "dim1": 1,
+        "dim2": 25,
+        "dim3": 25,
+        "dim4": 32
+    },
+    "%167": {
+        "shape": "(1, 14, 14, 64)",
+        "dim1": 1,
+        "dim2": 14,
+        "dim3": 14,
+        "dim4": 64
+    },
+    "%204": {
+        "shape": "(1, 13, 13, 64)",
+        "dim1": 1,
+        "dim2": 13,
+        "dim3": 13,
+        "dim4": 64
+    },
+    "%241": {
+        "shape": "(1, 8, 8, 128)",
+        "dim1": 1,
+        "dim2": 8,
+        "dim3": 8,
+        "dim4": 128
+    },
+    "%278": {
+        "shape": "(1, 8, 8, 128)",
+        "dim1": 1,
+        "dim2": 8,
+        "dim3": 8,
+        "dim4": 128
+    },
+    "%315": {
+        "shape": "(1, 8, 8, 128)",
+        "dim1": 1,
+        "dim2": 8,
+        "dim3": 8,
+        "dim4": 128
+    },
+    "%352": {
+        "shape": "(1, 8, 8, 128)",
+        "dim1": 1,
+        "dim2": 8,
+        "dim3": 8,
+        "dim4": 128
+    },
+    "%389": {
+        "shape": "(1, 8, 8, 128)",
+        "dim1": 1,
+        "dim2": 8,
+        "dim3": 8,
+        "dim4": 128
+    },
+    "%426": {
+        "shape": "(1, 7, 7, 128)",
+        "dim1": 1,
+        "dim2": 7,
+        "dim3": 7,
+        "dim4": 128
+    },
+    "%463": {
+        "shape": "(1, 5, 5, 256)",
+        "dim1": 1,
+        "dim2": 5,
+        "dim3": 5,
+        "dim4": 256
+    }
+}
+{
+    "%4": {
+        "input_layer": "%0",
+        "input_param": "param_1",
+        "stride": "[2, 2]",
+        "stride_dim1": 2,
+        "stride_dim2": 2,
+        "channels": "8",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 48, 48, 8)"
+    },
+    "%23": {
+        "input_layer": "%19",
+        "input_param": "param_3",
+        "channels": "8",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 48, 48, 8)"
+    },
+    "%41": {
+        "input_layer": "%37",
+        "input_param": "param_5",
+        "channels": "16",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 48, 48, 16)"
+    },
+    "%60": {
+        "input_layer": "%56",
+        "input_param": "param_7",
+        "stride": "[2, 2]",
+        "stride_dim1": 2,
+        "stride_dim2": 2,
+        "channels": "16",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 24, 24, 16)"
+    },
+    "%78": {
+        "input_layer": "%74",
+        "input_param": "param_9",
+        "channels": "32",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 24, 24, 32)"
+    },
+    "%97": {
+        "input_layer": "%93",
+        "input_param": "param_11",
+        "channels": "32",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 24, 24, 32)"
+    },
+    "%115": {
+        "input_layer": "%111",
+        "input_param": "param_13",
+        "channels": "32",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 24, 24, 32)"
+    },
+    "%134": {
+        "input_layer": "%130",
+        "input_param": "param_15",
+        "stride": "[2, 2]",
+        "stride_dim1": 2,
+        "stride_dim2": 2,
+        "channels": "32",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 12, 12, 32)"
+    },
+    "%152": {
+        "input_layer": "%148",
+        "input_param": "param_17",
+        "channels": "64",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 12, 12, 64)"
+    },
+    "%171": {
+        "input_layer": "%167",
+        "input_param": "param_19",
+        "channels": "64",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 12, 12, 64)"
+    },
+    "%189": {
+        "input_layer": "%185",
+        "input_param": "param_21",
+        "channels": "64",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 12, 12, 64)"
+    },
+    "%208": {
+        "input_layer": "%204",
+        "input_param": "param_23",
+        "stride": "[2, 2]",
+        "stride_dim1": 2,
+        "stride_dim2": 2,
+        "channels": "64",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 6, 6, 64)"
+    },
+    "%226": {
+        "input_layer": "%222",
+        "input_param": "param_25",
+        "channels": "128",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 6, 6, 128)"
+    },
+    "%245": {
+        "input_layer": "%241",
+        "input_param": "param_27",
+        "channels": "128",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 6, 6, 128)"
+    },
+    "%263": {
+        "input_layer": "%259",
+        "input_param": "param_29",
+        "channels": "128",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 6, 6, 128)"
+    },
+    "%282": {
+        "input_layer": "%278",
+        "input_param": "param_31",
+        "channels": "128",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 6, 6, 128)"
+    },
+    "%300": {
+        "input_layer": "%296",
+        "input_param": "param_33",
+        "channels": "128",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 6, 6, 128)"
+    },
+    "%319": {
+        "input_layer": "%315",
+        "input_param": "param_35",
+        "channels": "128",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 6, 6, 128)"
+    },
+    "%337": {
+        "input_layer": "%333",
+        "input_param": "param_37",
+        "channels": "128",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 6, 6, 128)"
+    },
+    "%356": {
+        "input_layer": "%352",
+        "input_param": "param_39",
+        "channels": "128",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 6, 6, 128)"
+    },
+    "%374": {
+        "input_layer": "%370",
+        "input_param": "param_41",
+        "channels": "128",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 6, 6, 128)"
+    },
+    "%393": {
+        "input_layer": "%389",
+        "input_param": "param_43",
+        "channels": "128",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 6, 6, 128)"
+    },
+    "%411": {
+        "input_layer": "%407",
+        "input_param": "param_45",
+        "channels": "128",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 6, 6, 128)"
+    },
+    "%430": {
+        "input_layer": "%426",
+        "input_param": "param_47",
+        "stride": "[2, 2]",
+        "stride_dim1": 2,
+        "stride_dim2": 2,
+        "channels": "128",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 3, 3, 128)"
+    },
+    "%448": {
+        "input_layer": "%444",
+        "input_param": "param_49",
+        "channels": "256",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 3, 3, 256)"
+    },
+    "%467": {
+        "input_layer": "%463",
+        "input_param": "param_51",
+        "channels": "256",
+        "kernel": "[3, 3]",
+        "kernel_dim1": 3,
+        "kernel_dim2": 3,
+        "output_shape": "(1, 3, 3, 256)"
+    },
+    "%485": {
+        "input_layer": "%481",
+        "input_param": "param_53",
+        "channels": "256",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 3, 3, 256)"
+    },
+    "%506": {
+        "input_layer": "%502",
+        "input_param": "param_55",
+        "channels": "2",
+        "kernel": "[1, 1]",
+        "kernel_dim1": 1,
+        "kernel_dim2": 1,
+        "output_shape": "(1, 1, 1, 2)"
+    }
+}
