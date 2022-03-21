@@ -1,10 +1,3 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>  //Header file for sleep(). man 3 sleep for details.
-// #include <pthread.h>
-#include <stdint.h>
-// #include "mbed.h"
 int64_t multiply1[8] = {2027631630, 1648833896, 1118324869, 1230983227, 1554345884, 1160370405, 1426080563, 1232275221};
 int64_t add1[8] = {1099511627776, 68719476736, 274877906944, 549755813888, 68719476736, 549755813888, 1099511627776, 549755813888};
 int64_t shift1[8] = {41, 37, 39, 40, 37, 40, 41, 40};

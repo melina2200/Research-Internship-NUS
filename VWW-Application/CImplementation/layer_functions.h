@@ -1,6 +1,3 @@
-#include <stdio.h>
-
-
 //Depthwise Convolution, input and weight matrix must already be flattened
 void conv_layer(int8_t* input,int8_t* weights, int channels, int weight_dim, int output_dim, int32_t* output, int groups){
     printf("channels: %d \n", channels);

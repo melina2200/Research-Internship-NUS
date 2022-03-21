@@ -6,8 +6,8 @@
 #include "im2col.h"
 #include "quant_params.h"
 
-#include <math.h>
-#include <inttypes.h>
+//#include <math.h>
+//#include <inttypes.h>
 
 //matrices used to store the results of a layer after the convolution
 //layer 1,2

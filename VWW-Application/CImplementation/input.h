@@ -1,10 +1,3 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>  //Header file for sleep(). man 3 sleep for details.
-// #include <pthread.h>
-#include <stdint.h>
-// #include "mbed.h"
 extern const int8_t INPUT_MATRIX[2304*9]={42,79,74,67,40,57,25,49,82,
 74,-48,-76,57,-65,-81,82,-69,-18,
 -76,-75,64,-81,-74,-96,-18,-95,57,

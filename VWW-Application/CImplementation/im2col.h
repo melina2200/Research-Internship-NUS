@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 //function that extracts the value from the matrix to be flattend while also including padding
 int8_t im2col_get_pixel(int8_t *im, int height, int width,
                         int row, int col, int channel, int pad_l, int pad_r, int pad_u, int pad_d, int8_t pad_value)

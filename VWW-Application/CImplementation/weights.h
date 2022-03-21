@@ -1,11 +1,3 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>  //Header file for sleep(). man 3 sleep for details.
-// #include <pthread.h>
-#include <stdint.h>
-// #include "mbed.h"
-
 //param1 9rows*8cols
 #define WEIGHT_DIM1 9
 #define CHANNELS1 8
