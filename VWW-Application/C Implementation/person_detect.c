@@ -1,246 +1,75 @@
 
 #include "bias.h"
-#include <math.h>
-#include <inttypes.h>
+#include "layer_functions.h"
 #include "image.h"
 #include "weights.h"
 #include "im2col.h"
 #include "quant_params.h"
-#define C1 80 //weight dim x*y
-#define R1 8 //channels
-int32_t OUTPUT_MATRIX1[48*48*8]; //48*48*8
-int8_t OUTPUT_MATRIX1_int8[48*48*8]; //48*48*8
 
-int32_t OUTPUT_MATRIX2[48*48*16]; //48*48*6
-int8_t OUTPUT_MATRIX2_int8[48*48*16]; //48*48*16
+#include <math.h>
+#include <inttypes.h>
 
+//matrices used to store the results of a layer after the convolution
+//layer 1,2
+int32_t OUTPUT_MATRIX1[48*48*8];
+int8_t OUTPUT_MATRIX1_int8[48*48*8];
+//layer 3
+int32_t OUTPUT_MATRIX2[48*48*16];
+int8_t OUTPUT_MATRIX2_int8[48*48*16];
+//layer 4
 int32_t OUTPUT_MATRIX3[24*24*16];
 int8_t OUTPUT_MATRIX3_int8[24*24*16]; 
-
+//layer 5-7
 int32_t OUTPUT_MATRIX4[24*24*32]; 
 int8_t OUTPUT_MATRIX4_int8[24*24*32];
-
+//layer 8
 int32_t OUTPUT_MATRIX5[12*12*32]; 
 int8_t OUTPUT_MATRIX5_int8[12*12*32];
-
+//layer 9-11
 int32_t OUTPUT_MATRIX6[12*12*64]; 
 int8_t OUTPUT_MATRIX6_int8[12*12*64];
-
+//layer 12
 int32_t OUTPUT_MATRIX7[6*6*64]; 
 int8_t OUTPUT_MATRIX7_int8[6*6*64];
-
+//layer 13-23
 int32_t OUTPUT_MATRIX8[6*6*128]; 
 int8_t OUTPUT_MATRIX8_int8[6*6*128];
-
+//layer 24
 int32_t OUTPUT_MATRIX9[3*3*128]; 
 int8_t OUTPUT_MATRIX9_int8[3*3*128];
-
+//layer 25-27
 int32_t OUTPUT_MATRIX10[3*3*256]; 
 int8_t OUTPUT_MATRIX10_int8[3*3*256];
-
+//layer 28
 int8_t OUTPUT_MATRIX11_int8[1*1*256];
-
+//layer 29
 int32_t OUTPUT_MATRIX12[1*1*2]; 
 int8_t OUTPUT_MATRIX12_int8[1*1*2];
 
-
-
+//matrices used to store the flattend input after the im2col function (only for depthwise Conv Layers)
+//layer 1
 int8_t INPUT_MATRIX1[48*48*WEIGHT_DIM1]; //48*48*9
+//layer 2
 int8_t INPUT_MATRIX2[48*48*WEIGHT_DIM2*CHANNELS1]; //48*48*9*8
+//layer 4
 int8_t INPUT_MATRIX3[24*24*WEIGHT_DIM4*CHANNELS_OUT3]; //24*24*9*16
+//layer 6
 int8_t INPUT_MATRIX4[24*24*WEIGHT_DIM6*CHANNELS_OUT5]; //24*24*9*32
+//layer 8
 int8_t INPUT_MATRIX5[12*12*WEIGHT_DIM8*CHANNELS_OUT7]; //12*12*9*32
+//layer 10
 int8_t INPUT_MATRIX6[12*12*WEIGHT_DIM10*CHANNELS_OUT9]; //12*12*9*64
+//layer 12
 int8_t INPUT_MATRIX7[6*6*WEIGHT_DIM12*CHANNELS_OUT11]; //6*6*9*64
+//layer 14, 16, 18, 20, 22
 int8_t INPUT_MATRIX8[6*6*WEIGHT_DIM14*CHANNELS_OUT13]; //6*6*9*128
+//layer 24
 int8_t INPUT_MATRIX9[3*3*WEIGHT_DIM24*CHANNELS_OUT23]; //3*3*9*128
+//layer 26
 int8_t INPUT_MATRIX10[3*3*WEIGHT_DIM26*CHANNELS_OUT25]; //3*3*9*256
 
-
-
-void conv_layer(int8_t* input,int8_t* weights, int channels, int weight_dim, int output_dim, int32_t* output, int input_channels){
-    for (int i=0;i<channels; i++) { //channels = 8
-        for (int j=0;j<output_dim; j++) { //output_dim = 48*48= 2304
-            int32_t temp=0;
-            for (int k=0;k<weight_dim*input_channels; k++){ //weight_dim = 9
-                int weight_ind = 0;
-                if (input_channels == 1)
-                    weight_ind = k*channels+i;
-                else
-                    weight_ind = k;
-                temp += weights[weight_ind]*input[k*output_dim+j];
-                /*if ((i==0)&&(j==0)){
-                    printf("weight_ind: %d \n", weight_ind);
-                    printf("k*output_dim+j: %d \n", k*output_dim+j);
-                }*/
-            }
-            output[i*output_dim+j] = temp;
-            //printf("i*output_dim+j: %d \n", i*output_dim+j);
-        }
-    }
-    //printf("first entry output matrix: %d \n",output[0]);
-    //printf("Conv Done\n");
-}
-
-void pointwise_conv_layer(int8_t* input,int8_t* weights, int channels_input, int channels_output, int output_dim, int32_t* output){
-    for (int i=0;i<channels_output; i++) { //16
-        for (int j=0;j<output_dim; j++) { //2304
-            int32_t temp=0;
-            for (int k=0;k<channels_input; k++){ //8
-                temp += weights[k*channels_output+i]*input[k*output_dim+j];
-                /*if ((i==0)&&(j==0)){
-                    printf("weight_ind: %d \n", k*channels_output+i);
-                    printf("input_ind: %d \n", k*output_dim+j);
-                    printf("temp: %d \n", temp);
-                }*/
-            }
-            output[i*output_dim+j] = temp;
-            //printf("i*output_dim+j: %d \n", i*output_dim+j);
-        }
-    }
-    //printf("first entry output matrix: %d \n",output[0]);
-    //printf("Conv Pointwise Done\n");
-}
-
-void avg_pool_layer(int8_t* input, int pool_dim, int channels, int8_t* output){
-    for (int i=0;i<channels; i++) { //channels = 256
-        int32_t temp=0;
-        for (int j=0;j<pool_dim; j++) { //output_dim = 3*3 = 9
-                temp += input[i*pool_dim+j];
-                /*if ((i==0)){
-                    printf("i*pool_dim+j: %d \n", i*pool_dim+j);
-                    printf("input[i*pool_dim+j]: %d \n", input[i*pool_dim+j]);
-                }*/
-        }
-        output[i] = (int) temp/pool_dim;
-        /*if (i==0)
-            printf("output[0]: %d \n", output[i]);*/
-    }
-    //printf("first entry output matrix: %d \n",output[0]);
-    //printf("AvgPool Done\n");
-}
-
-
-void quantize_conv_layer(int32_t* input,int8_t* weights, const int channels, int weight_dim, int output_dim, int multiplier) {
-    int i, j;
-    int32_t sum_weight[channels]; //channels
-    for (int q=0; q<channels; q++) {
-        sum_weight[q] = 0;
-    }
-    for(i=0; i<channels; i++) {
-        for (j=0; j<weight_dim; j++) {
-            sum_weight[i] += weights[j*channels+i];
-            /*if (i==0)
-            {
-                printf("index: %d \n",j*channels+i);
-                printf("entry: %d \n",weights[j*channels+i]);
-                printf("first entry sum weights: %d \n",sum_weight[0]);
-            }*/
-        }
-        //printf("Length of sum_weight: %d \n", (sizeof(sum_weight)/sizeof(*sum_weight)));
-    }
-    //printf("first entry sum weights: %d \n",sum_weight[0]);
-    //printf("Done summing weights\n");
-
-    for (i=0; i<output_dim*channels; i++) {
-        int ind = (int) i/output_dim;
-        //printf("ind: %d \n", ind);
-        input[i] = input[i] + (multiplier*sum_weight[ind]);
-    }
-    //printf("first entry matrix: %d \n",input[0]);
-    //printf("Quant Done\n");
-}
-
-void add_bias(int32_t* input, int32_t* bias, int output_dim, int channels) {
-    for (int i=0; i<output_dim*channels; i++) {
-        int indx = (int) i/output_dim;
-        //printf("ind: %d \n", indx);
-        //printf("i: %d \n", i);
-        input[i] += bias[indx];
-    }
-    //printf("first entry matrix: %d \n",input[0]);
-    //printf("Bias Done\n");
-}
-
-void requantize_conv(int32_t* input,int8_t* output, const int output_dim, const int channels, int64_t* multiply, int64_t* add, int64_t* shift, int last_layer) {
-
-    int64_t OUTPUT64[output_dim*channels];
-
-    for (int i=0; i<output_dim*channels; i++) {
-        int ind = (int) i/output_dim;
-        //printf("ind: %d \n", ind);
-        //printf("i: %d \n", i);
-        OUTPUT64[i] = input[i]*multiply[ind]+add[ind];
-        /*if(i==0)
-            printf("result after mult and add at 0 %" PRId64 "\n", OUTPUT64[i]);*/
-        input[i] = OUTPUT64[i]>>shift[ind];
-        if(last_layer == 1){
-            input[i] +=3;
-        }
-        /*if(i==0)
-            printf("result after shift at 0: %d \n",input[i]);*/
-        input[i] += -128;
-        if (input[i] < -128) {
-            //printf("Too small %d, %d \n", i, OUTPUT64[i]);
-            output[i] = -128;
-        }
-        else if (input[i] > 127) {
-            //printf("Too large %d \n", i);
-            output[i] = 127;
-        }
-        else{
-            output[i] = input[i];
-        }
-    }
-    //printf("Requant Done\n");
-}
-
-void softmax_and_output(int8_t* input, const int input_dim) {
-
-    float OUTPUT32[input_dim];
-    float SOFTMAX[input_dim];
-    float softmax_sum = 0;
-    for (int i=0; i<input_dim; i++) {
-        OUTPUT32[i] = input[i];
-        OUTPUT32[i] -= 3;
-        OUTPUT32[i] *= 0.038815176;
-        SOFTMAX[i] = expf(OUTPUT32[i]);
-        softmax_sum += SOFTMAX[i];
-        //printf("SOFTMAX[i] %.6f \n", SOFTMAX[i]);
-    }
-    //printf("softmax_sum %.6f \n", softmax_sum);
-    for (int i=0; i<input_dim; i++) {
-        OUTPUT32[i] = SOFTMAX[i]/softmax_sum;
-        if(i==0)
-            printf("Probability NO Person %.6f \n", OUTPUT32[i]);
-        if(i==1)
-            printf("Probability Person %.6f \n", OUTPUT32[i]);
-        OUTPUT32[i] = OUTPUT32[i]/0.00390625;
-        OUTPUT32[i] -= (int) 128;
-        if (OUTPUT32[i] < -128) {
-            //printf("Too small %d, %d \n", i, OUTPUT64[i]);
-            input[i] = -128;
-        }
-        else if (OUTPUT32[i] > 127) {
-            //printf("Too large %d \n", i);
-            input[i] = 127;
-        }
-        else{
-            input[i] = OUTPUT32[i];
-        }
-    }
-    printf("Output 0 %.6f \n", OUTPUT32[0]);
-    printf("Output 1 %.6f \n", OUTPUT32[1]);
-    printf("Result 0 %d \n", input[0]);
-    printf("Result 1 %d \n", input[1]);
-    printf("Softmax and Output Done\n");
-}
-
-
-
-
 int main() {
-    im2col(IMAGE_NOPERSON,1,IMAGE_DIM,IMAGE_DIM,3,2,INPUT_MATRIX1,0,1,0,1,-2); 
+    im2col(IMAGE_PERSON,1,IMAGE_DIM,IMAGE_DIM,3,2,INPUT_MATRIX1,0,1,0,1,-2); 
     conv_layer(INPUT_MATRIX1, WEIGHT_MATRIX1,CHANNELS1, WEIGHT_DIM1, 48*48, OUTPUT_MATRIX1, 1);
     quantize_conv_layer(OUTPUT_MATRIX1,WEIGHT_MATRIX1,CHANNELS1, WEIGHT_DIM1, 48*48,2);
     add_bias(OUTPUT_MATRIX1, bias1,48*48, CHANNELS1);
@@ -430,21 +259,6 @@ int main() {
 
     softmax_and_output(OUTPUT_MATRIX12_int8,2);
 
-    /*
-    int obtained_label = 0;
-    for(int i=0;i<100000;i++){
-
-        microspeech_conv_layer();
-        quantize_conv_layer();
-        microspeech_bias_ReLu();
-        requantize_conv();
-        reshape_conv_output();
-        microspeech_fc_layer();
-        quantize_fc_layer();    
-        obtained_label = requantize_fc();
-        printf("Output Label:%d \n", obtained_label);
-    }
-    printf("Output Label:%d \n", obtained_label);*/
     return 0;
 }
 
