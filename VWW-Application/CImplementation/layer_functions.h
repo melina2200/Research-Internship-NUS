@@ -128,16 +128,16 @@ void add_bias(int32_t* input, int32_t* bias, int output_dim, int channels) {
 
 void requantize_conv(int32_t* input,int8_t* output, const int output_dim, const int channels, int64_t* multiply, int64_t* add, int64_t* shift, int last_layer) {
 
-    int64_t OUTPUT64[output_dim*channels];
+    int64_t OUTPUT64;
 
     for (int i=0; i<output_dim*channels; i++) {
         int ind = (int) i/output_dim;
         //printf("ind: %d \n", ind);
         //printf("i: %d \n", i);
-        OUTPUT64[i] = input[i]*multiply[ind]+add[ind];
+        OUTPUT64 = input[i]*multiply[ind]+add[ind];
         /*if(i==0)
             printf("result after mult and add at 0 %" PRId64 "\n", OUTPUT64[i]);*/
-        input[i] = OUTPUT64[i]>>shift[ind];
+        input[i] = OUTPUT64>>shift[ind];
         if(last_layer == 1){
             input[i] +=3;
         }
