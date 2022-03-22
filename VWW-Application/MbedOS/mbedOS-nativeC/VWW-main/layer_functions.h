@@ -1,7 +1,6 @@
+#include <math.h>
 //Depthwise Convolution, input and weight matrix must already be flattened
 void conv_layer(int8_t* input,int8_t* weights, int channels, int weight_dim, int output_dim, int32_t* output, int groups){
-    printf("channels: %d \n", channels);
-    printf("groups: %d \n", groups);
     //if groups is 1 each filter gets multiplied with each input channel
     if (groups == 1)
     {
@@ -31,6 +30,7 @@ void conv_layer(int8_t* input,int8_t* weights, int channels, int weight_dim, int
             }
         }
     }
+    //printf("Conv Done\n");
 }
 
 void pointwise_conv_layer(int8_t* input,int8_t* weights, int channels_input, int channels_output, int output_dim, int32_t* output){
@@ -43,6 +43,7 @@ void pointwise_conv_layer(int8_t* input,int8_t* weights, int channels_input, int
             output[i*output_dim+j] = temp;
         }
     }
+    //printf("Pointwise Conv Done\n");
 }
 
 void avg_pool_layer(int8_t* input, int pool_dim, int channels, int8_t* output){
@@ -53,6 +54,7 @@ void avg_pool_layer(int8_t* input, int pool_dim, int channels, int8_t* output){
         }
         output[i] = (int) temp/pool_dim;
     }
+    //printf("Avg Pool Done\n");
 }
 
 void quantize_conv_layer(int32_t* input,int8_t* weights, const int channels, int weight_dim, int output_dim, int multiplier) {
@@ -71,6 +73,7 @@ void quantize_conv_layer(int32_t* input,int8_t* weights, const int channels, int
         int ind = (int) i/output_dim;
         input[i] = input[i] + (multiplier*sum_weight[ind]);
     }
+    //printf("Quantize Done\n");
 }
 
 void add_bias(int32_t* input, int32_t* bias, int output_dim, int channels) {
@@ -78,6 +81,7 @@ void add_bias(int32_t* input, int32_t* bias, int output_dim, int channels) {
         int indx = (int) i/output_dim;
         input[i] += bias[indx];
     }
+    //printf("Bias Done\n");
 }
 
 void requantize_conv(int32_t* input,int8_t* output, const int output_dim, const int channels, int64_t* multiply, int64_t* add, int64_t* shift, int last_layer) {
@@ -102,8 +106,9 @@ void requantize_conv(int32_t* input,int8_t* output, const int output_dim, const 
             output[i] = input[i];
         }
     }
+    //printf("Requantize Done\n");
 }
-/*
+
 void softmax_and_output(int8_t* input, const int input_dim) {
 
     float OUTPUT32[input_dim];
@@ -113,7 +118,7 @@ void softmax_and_output(int8_t* input, const int input_dim) {
         OUTPUT32[i] = input[i];
         OUTPUT32[i] -= 3;
         OUTPUT32[i] *= 0.038815176;
-        SOFTMAX[i] = expf(OUTPUT32[i]);
+        SOFTMAX[i] = exp(OUTPUT32[i]);
         softmax_sum += SOFTMAX[i];
         //printf("SOFTMAX[i] %.6f \n", SOFTMAX[i]);
     }
@@ -143,4 +148,4 @@ void softmax_and_output(int8_t* input, const int input_dim) {
     printf("Result 0 %d \n", input[0]);
     printf("Result 1 %d \n", input[1]);
     printf("Softmax and Output Done\n");
-}*/
+}

@@ -2,3 +2,4 @@ BUILD
 mbed-os
 __pycache__/
 .mbed
+.vscode
