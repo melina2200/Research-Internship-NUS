@@ -1,0 +1,17 @@
+{
+    "config": {
+        "main-stack-size": {
+            "help": "Specifies stack size of the main thread",
+            "value": 8192
+        }
+    },
+    "requires": ["bare-metal"]
+    ,"macros": [
+        "LINUX"
+    ],
+    "target_overrides": {
+        "*": {
+            "target.printf_lib"                         : "std"
+        }
+    }
+}
