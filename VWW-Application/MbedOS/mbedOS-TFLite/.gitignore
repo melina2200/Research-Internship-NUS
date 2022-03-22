@@ -1,3 +1,4 @@
 BUILD
 mbed-os
-__pycache__
+__pycache__/
+.mbed
