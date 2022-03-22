@@ -2,7 +2,7 @@
     "config": {
         "main-stack-size": {
             "help": "Specifies stack size of the main thread",
-            "value": 8192
+            "value": 65536
         }
     },
     "requires": ["bare-metal"]
