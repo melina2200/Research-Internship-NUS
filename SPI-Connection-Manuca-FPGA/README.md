@@ -14,7 +14,7 @@ Until now the FPGA has been controlled with a QSPI controller directly from a PC
 
 In the [main script](mbedOS-SPIconnectionSetup/main.cpp) it is specified which ports need to be used on the Manuca board and in the script to get a 5V or 3.3V output.
 
-The binary can be build with [Mbed Studio](https://os.mbed.com/studio/). To combile the code for Manuca Air choose the target NUCLEO-L476RG. Make sure the PeripheralsPins.c file within this folder (mbed-os/targets/TARGET_STM/TARGET_STM32L4/TARGET_STM32L476xG/TARGET_NUCLEO_L476RG) has been modified as follows to get the correct 3.3V output.
+The binary can be build with [Mbed Studio](https://os.mbed.com/studio/). To combile the code for Manuca Air choose the target NUCLEO-L476RG. Make sure the PeripheralsPins.c file (within this folder: mbed-os/targets/TARGET_STM/TARGET_STM32L4/TARGET_STM32L476xG/TARGET_NUCLEO_L476RG) has been modified as follows to get the correct 3.3V output.
 
 You will need to add the pin names to the PeripheralPins.c file in the same folder, in the arrays under their corresponding SPI function:
 ```
