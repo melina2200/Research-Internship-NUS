@@ -1,28 +1,26 @@
 # Visual Wake Word Application
 
-## C Implementation
+The Visual Wake Work Application shall detect people in images in a lightweight and efficient manner such that the application can be deployed on a microcontroller. The following image shows the steps that have been necessary to implement this application.
 
-[This folder](CImplementation) contains the implemetation of Visual Wake Word Application in C, all model parameters needed have been extracted from the Trained Model (1000000 Iterations) and stored in header files
+![Roadmap](https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/roadmap.png?raw=true)
 
-## TVM Scripts
+**(1)** In the first step the model had to be trained. I used the [COCO Dataset](https://cocodataset.org/#home) for training. The model is based on the [MobileNets](https://arxiv.org/pdf/1704.04861.pdf) model. The [TrainPersonDetect Jupyter Notebook](TrainPersonDetect.ipynb) contains the script to train the model for the Person Detection Algorithm. I used it in Google Colab. Maybe there need to be done some modifications if you run it as a jupyter notebook. The script is based on the Training of the [Person Detection Example of the TF Lite Micro Repo](https://github.com/tensorflow/tflite-micro/tree/main/tensorflow/lite/micro/examples/person_detection).
 
-[This folder](TVMScripts) contains all scripts used for extracting model parameters from trained TFLite models with the help of TVM. To run these scripts it is necessary to install TVM, more information in the ReadMe File within that folder.
+The final ouput of the trained model can be found in the TrainedModel folders for [298.000 Iterations](Trained-Model-298000Iter) and for [1.000.000 Iterations](Trained-Model-1000000Iter). These models have been trained with an input image size of 96x96 Pixels (grayscale).
 
-## Node Representation
+**(2)** In the second step I had to extract the trained model weight, the bias and the quantization parameters that are needed for the implementation in C of this network.[The TVMScripts folder](TVMScripts) contains all scripts used for extracting model parameters from trained TFLite models with the help of TVM. To run these scripts it is necessary to install TVM, more information in the ReadMe File within that folder.
 
-[This folder](NodeRepresentation) contains the Layer-Node Representation of the Visual Wake Word Network
+**(3)** In the third steo I implemented the model in nativeC code. This step is necessary to be able to modify the layer functions for a simpler acceleration with the Hycube CGRA. [The C Implementation folder](CImplementation) contains the implemetation of Visual Wake Word Application in C, all model parameters needed have been extracted from the Trained Model (1000000 Iterations) and stored in header files. 
 
-## Trained Model 298000Iter
+**(4)** In the next step both implementations (TFLite and nativeC) are deployed onto the Manuca Microcontroller with the help of the [mbedOS Framework](https://os.mbed.com/mbed-os/). 
 
-[This folder](Trained-Model-298000Iter) contains the Model files of the Visual Wakeword Application trained for 298,000 iterations with input size 96x96
-
-## Trained Model 1000000Iter
-
- [This folder](Trained-Model-1000000Iter) contains the Model files of the Visual Wakeword Application trained for 1,000,000 iterations with input size 96x96
+**(5)** In the future the model shall be accelerated with the HyCube CGRA to achieve even faster and more efficient results. 
 
 
 ## other Files
 
+[The NodeRepresentation](NodeRepresentation) contains the Layer-Node Representation of the Visual Wake Word Network
+
 The [Person Detection Algorithm Excel File](Person_Detection_Algorithm.xlsx) contains detailed information about the layer structure of the implemented model.
 
-The [TrainPersonDetect Jupyter Notebook](TrainPersonDetect.ipynb) contains the script to train the model for the Person Detection Algorithm. I used it in Google Colab. Maybe there need to be done some modifications if you run it as a jupyter notebook.
+
