@@ -46,6 +46,8 @@ void im2col(int8_t* data_im,
         }
     }
     //printf("IM2COL Done\n");
+    //printf("data_col[1000]: %d \n", data_col[1000]);
+    //printf("data_col[2000]: %d \n", data_col[2000]);
 }
 
 
