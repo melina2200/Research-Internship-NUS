@@ -1,4 +1,5 @@
 #include <math.h>
+#include <inttypes.h>
 //Depthwise Convolution, input and weight matrix must already be flattened
 void conv_layer(int8_t* input,int8_t* weights, int channels, int weight_dim, int output_dim, int32_t* output, int groups){
     //if groups is 1 each filter gets multiplied with each input channel
@@ -91,6 +92,10 @@ void requantize_conv(int32_t* input,int8_t* output, const int output_dim, const 
     for (int i=0; i<output_dim*channels; i++) {
         int ind = (int) i/output_dim;
         OUTPUT64 = input[i]*multiply[ind]+add[ind];
+        if(i == 0)
+        {
+            printf("\r first input: %ld \n", input[i]);
+        }
         input[i] = OUTPUT64>>shift[ind];
         if(last_layer == 1){
             input[i] +=3;

@@ -7,12 +7,16 @@
 #include <chrono>
 #include <deque>
 #include <SPI.h>
+
+//Pins for 3.3V output
 /*
-const PinName spi_MOSI = PinName::PG_11;//PC_12;
-const PinName spi_MISO = PinName::PG_10;//PC_11;
-const PinName spi_CLK = PinName::PG_9;//PC_10;
-const PinName spi_CS = PinName::PG_12;//PA_4;
+const PinName spi_MOSI = PinName::PG_11;/
+const PinName spi_MISO = PinName::PG_10;
+const PinName spi_CLK = PinName::PG_9;
+const PinName spi_CS = PinName::PG_12;
 */
+
+//pins for 5V output
 const PinName spi_MOSI = PinName::PC_12;
 const PinName spi_MISO = PinName::PC_11;
 const PinName spi_CLK = PinName::PC_10;
@@ -31,7 +35,7 @@ int main()
 {
     cs = 0;
     spi.format(8,3);
-    spi.frequency(1000); //10MHz
+    spi.frequency(10000000); //10MHz
     // spi.frequency(100000000); //100MHz
     wait_us(1000000);
     printf("SPI Master Initialized \n");
