@@ -17,11 +17,17 @@ The final ouput of the trained model can be found in the TrainedModel folders fo
 **(5)** In the future the model shall be accelerated with the HyCube CGRA to achieve even faster and more efficient results. 
 
 
-## other Files
+## Other Files
 
 [The NodeRepresentation](NodeRepresentation) contains the Layer-Node Representation of the Visual Wake Word Network
 
 The [Person Detection Algorithm Excel File](Person_Detection_Algorithm.xlsx) contains detailed information about the layer structure of the implemented model.
+
+
+## VWW Model
+The Visual Wake Word Model for Person Detection is based on the [MobileNets](https://arxiv.org/pdf/1704.04861.pdf) model and makes use of depthwise seperable convolution. In this process the 'normal' convolution is seperated in two convolution steps, the depthwise and the pointwise convolution. This separation divides a convolution kernel into two smaller kernels leading to a reduction in multiplications and therefore computational complexity. In the example given below instead of doing 3x3x3 = 27 multiplications we will now do 3x3 = 9 multiplications in the first step and them 3 in the second, leading to a total of 12 multiplications.
+
+![SeparableConv](https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/separableConv.png?raw=true)
 
 
 TODO: Add detailed layer description
