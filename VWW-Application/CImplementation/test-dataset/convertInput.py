@@ -27,13 +27,13 @@ print(folder_path)
 count = 0
 for filename in sorted(os.listdir(folder_path)):
     if count > 100: break
-    path = folder_path +'/'+ filename
-    image_int8 = convertImage(path)
+    image_path = folder_path +'/'+ filename
+    image_int8 = convertImage(image_path)
     image_int8 = np.resize(image_int8, (96,96))
     #print(image_int8)
     #image = Image.open(path)
     print(filename + ' 0')
-    txt_file = str(filename) + '_array.h'
+    txt_file = 'test_arrays/'+str(filename) + '_array.h'
     with open(txt_file, "w") as f:
         f.write('#define IMAGE_DIM  96 \n')
         f.write('extern const int8_t IMAGE[IMAGE_DIM*IMAGE_DIM]= {')
