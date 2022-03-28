@@ -24,3 +24,4 @@ The final ouput of the trained model can be found in the TrainedModel folders fo
 The [Person Detection Algorithm Excel File](Person_Detection_Algorithm.xlsx) contains detailed information about the layer structure of the implemented model.
 
 
+TODO: Add detailed layer description
