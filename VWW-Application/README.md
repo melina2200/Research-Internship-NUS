@@ -30,4 +30,4 @@ The Visual Wake Word Model for Person Detection is based on the [MobileNets](htt
 ![SeparableConv](https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/separableConv.png?raw=true)
 
 
-TODO: Add detailed layer description
+**TODO**: Add detailed layer description of DepthwiseConv, AvgPooling, Softmax and describe Quantization
