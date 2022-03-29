@@ -47,13 +47,13 @@ void pointwise_conv_layer(int8_t* input,int8_t* weights, int channels_input, int
     //printf("Pointwise Conv Done\n");
 }
 
-void avg_pool_layer(int8_t* input, int pool_dim, int channels, int8_t* output){
+void avg_pool_layer(int8_t* input, int pool_dim, int channels){
     for (int i=0;i<channels; i++) { //channels = 256
         int32_t temp=0;
         for (int j=0;j<pool_dim; j++) { //output_dim = 3*3 = 9
                 temp += input[i*pool_dim+j];
         }
-        output[i] = (int) temp/pool_dim;
+        input[i] = (int) temp/pool_dim;
     }
     //printf("Avg Pool Done\n");
 }
@@ -85,17 +85,15 @@ void add_bias(int32_t* input, int32_t* bias, int output_dim, int channels) {
     //printf("Bias Done\n");
 }
 
-void requantize_conv(int32_t* input,int8_t* output, const int output_dim, const int channels, int64_t* multiply, int64_t* add, int64_t* shift, int last_layer) {
+void requantize_conv(int32_t* input,int8_t* output, const int output_dim, const int channels, int32_t* multiply, int64_t* add, int8_t* shift, int last_layer) {
 
     int64_t OUTPUT64;
+    int64_t mult;
 
     for (int i=0; i<output_dim*channels; i++) {
         int ind = (int) i/output_dim;
-        OUTPUT64 = input[i]*multiply[ind]+add[ind];
-        if(i == 0)
-        {
-            printf("\r first input: %ld \n", input[i]);
-        }
+        mult = multiply[ind];
+        OUTPUT64 = input[i]*mult+add[ind];
         input[i] = OUTPUT64>>shift[ind];
         if(last_layer == 1){
             input[i] +=3;
