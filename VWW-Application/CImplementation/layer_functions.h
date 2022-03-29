@@ -50,11 +50,11 @@ void conv_layer(int8_t* input,int8_t* weights, int channels, int weight_dim, int
     printf("Conv Done\n");
 }
 
-void pointwise_conv_layer(int8_t* input,int8_t* weights, int channels_input, int channels_output, int output_dim, int32_t* output){
-    for (int i=0;i<channels_output; i++) { //16
-        for (int j=0;j<output_dim; j++) { //2304
+void pointwise_conv_layer(int8_t* input,int8_t* weights, int channels_input, int channels_output, int output_dim, int32_t* output){ //ip, w, 256,64,9,op
+    for (int i=0;i<channels_output; i++) { //64
+        for (int j=0;j<output_dim; j++) { //9
             int32_t temp=0;
-            for (int k=0;k<channels_input; k++){ //8
+            for (int k=0;k<channels_input; k++){ //256
                 temp += weights[k*channels_output+i]*input[k*output_dim+j];
                 /*if ((i==0)&&(j==0)){
                     printf("weight_ind: %d \n", k*channels_output+i);

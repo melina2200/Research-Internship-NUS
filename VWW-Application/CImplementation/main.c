@@ -5,7 +5,6 @@
 #include "weights.h"
 #include "im2col.h"
 #include "quant_params.h"
-#include "test-dataset/000000001296.jpg_array.h"
 #include "combinedLayers.h"
 
 
@@ -96,7 +95,7 @@ int main() {
         depthwise_conv_layer(OUTPUT_MATRIX_int8, WEIGHT_MATRIX26, CHANNELS_OUT25, CHANNELS26, 3, 3, 1, 1, 1, 1, -128, bias26, multiply26, add26, shift26, 1);
         printf("Layer 26 Done\n");
 
-        complete_pointwise_conv_layer(OUTPUT_MATRIX_int8,WEIGHT_MATRIX27, CHANNELS_IN27, CHANNELS_OUT27, 3, bias27, multiply27, add27,  shift27);
+        layer27(OUTPUT_MATRIX_int8, WEIGHT_MATRIX27, CHANNELS_IN27, CHANNELS_OUT27, 3, bias27, multiply27, add27,  shift27);
 
         printf("Layer 27 Done\n");
 

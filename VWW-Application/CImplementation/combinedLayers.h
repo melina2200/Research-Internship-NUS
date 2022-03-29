@@ -40,6 +40,48 @@ void complete_pointwise_conv_layer(int8_t* matrix,int8_t* weights, const int inp
         requantize_conv(OUTPUT_MATRIX,matrix, input_dim*input_dim, outp_channels, multiply, add, shift, 0);
     }
 
+void layer27(int8_t* matrix,int8_t* weights, const int inp_channels, const int outp_channels , const int input_dim, 
+    int32_t* bias, int64_t* multiply, int64_t* add, int64_t* shift)
+    {
+        int32_t OUTPUT_MATRIX[input_dim*input_dim*outp_channels];
+        int32_t OUTPUT_MATRIX_SMALL[input_dim*input_dim*(outp_channels/4)];
+        pointwise_conv_layer(matrix,WEIGHT_MATRIX27_1,inp_channels,outp_channels/4, input_dim*input_dim, OUTPUT_MATRIX_SMALL);
+        for(int i=0; i<input_dim*input_dim; i++)
+        {
+            for(int j=0; j< (outp_channels/4); j++)
+            {
+                OUTPUT_MATRIX[j*input_dim*input_dim+i] = OUTPUT_MATRIX_SMALL[j*input_dim*input_dim+i];
+            } 
+        }
+        pointwise_conv_layer(matrix,WEIGHT_MATRIX27_2,inp_channels,outp_channels/4, input_dim*input_dim, OUTPUT_MATRIX_SMALL);
+        for(int i=0; i<input_dim*input_dim; i++)
+        {
+            for(int j=0; j< (outp_channels/4); j++)
+            {
+                OUTPUT_MATRIX[input_dim*input_dim*(outp_channels/4)+j*input_dim*input_dim+i] = OUTPUT_MATRIX_SMALL[j*input_dim*input_dim+i];
+            } 
+        }
+        pointwise_conv_layer(matrix,WEIGHT_MATRIX27_3,inp_channels,outp_channels/4, input_dim*input_dim, OUTPUT_MATRIX_SMALL);
+        for(int i=0; i<input_dim*input_dim; i++)
+        {
+            for(int j=0; j< (outp_channels/4); j++)
+            {
+                OUTPUT_MATRIX[2*input_dim*input_dim*(outp_channels/4)+j*input_dim*input_dim+i] = OUTPUT_MATRIX_SMALL[j*input_dim*input_dim+i];
+            } 
+        }
+        pointwise_conv_layer(matrix,WEIGHT_MATRIX27_4,inp_channels,outp_channels/4, input_dim*input_dim, OUTPUT_MATRIX_SMALL);
+        for(int i=0; i<input_dim*input_dim; i++)
+        {
+            for(int j=0; j< (outp_channels/4); j++)
+            {
+                OUTPUT_MATRIX[3*input_dim*input_dim*(outp_channels/4)+j*input_dim*input_dim+i] = OUTPUT_MATRIX_SMALL[j*input_dim*input_dim+i];
+            } 
+        }
+        quantize_conv_layer(OUTPUT_MATRIX,weights,outp_channels, inp_channels, input_dim*input_dim,128); 
+        add_bias(OUTPUT_MATRIX, bias,input_dim*input_dim, outp_channels);
+        requantize_conv(OUTPUT_MATRIX,matrix, input_dim*input_dim, outp_channels, multiply, add, shift, 0);
+    }
+
 void final_conv_layer(int8_t* matrix,int8_t* weights, const int inp_channels, const int outp_channels , const int input_dim, 
     int32_t* bias, int64_t* multiply, int64_t* add, int64_t* shift)
     {
