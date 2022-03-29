@@ -1,3 +1,5 @@
+#include <stdint.h>
+#include <stdio.h>
 #include <math.h>
 #include <inttypes.h>
 //Depthwise Convolution, input and weight matrix must already be flattened
@@ -77,12 +79,42 @@ void quantize_conv_layer(int32_t* input,int8_t* weights, const int channels, int
     //printf("Quantize Done\n");
 }
 
+void quantize_conv_layer27(int32_t* input,int8_t* weights1, int8_t* weights2, int8_t* weights3, int8_t* weights4, const int channels, int weight_dim, int output_dim, int multiplier) {
+    int i, j;
+    int32_t sum_weight[channels]; //channels
+    for (int q=0; q<channels; q++) {
+        sum_weight[q] = 0;
+    }
+    for(i=0; i<(channels/4); i++) {
+        for (j=0; j<weight_dim; j++) {
+            sum_weight[i] += weights1[j*(channels/4)+i];
+            sum_weight[i+(channels/4)] += weights2[j*(channels/4)+i];
+            sum_weight[i+2*(channels/4)] += weights3[j*(channels/4)+i];
+            sum_weight[i+3*(channels/4)] += weights4[j*(channels/4)+i];
+        }
+    }
+
+    for (i=0; i<output_dim*channels; i++) {
+        int ind = (int) i/output_dim;
+        input[i] = input[i] + (multiplier*sum_weight[ind]);
+    }
+    //printf("Quantize Done\n");
+}
+
 void add_bias(int32_t* input, int32_t* bias, int output_dim, int channels) {
     for (int i=0; i<output_dim*channels; i++) {
         int indx = (int) i/output_dim;
         input[i] += bias[indx];
     }
-    //printf("Bias Done\n");
+}
+
+void add_bias_16(int32_t* input, int16_t* bias, int output_dim, int channels) {
+    int32_t bias_32 = 0;
+    for (int i=0; i<output_dim*channels; i++) {
+        int indx = (int) i/output_dim;
+        bias_32 = bias[indx];
+        input[i] += bias_32;
+    }
 }
 
 void requantize_conv(int32_t* input,int8_t* output, const int output_dim, const int channels, int32_t* multiply, int64_t* add, int8_t* shift, int last_layer) {
@@ -129,9 +161,9 @@ void softmax_and_output(int8_t* input, const int input_dim) {
     for (int i=0; i<input_dim; i++) {
         OUTPUT32[i] = SOFTMAX[i]/softmax_sum;
         if(i==0)
-            printf("Probability NO Person %.6f \n", OUTPUT32[i]);
+            printf("\rProbability NO Person %.6f \n", OUTPUT32[i]);
         if(i==1)
-            printf("Probability Person %.6f \n", OUTPUT32[i]);
+            printf("\rProbability Person %.6f \n", OUTPUT32[i]);
         OUTPUT32[i] = OUTPUT32[i]/0.00390625;
         OUTPUT32[i] -= (int) 128;
         if (OUTPUT32[i] < -128) {
@@ -146,9 +178,9 @@ void softmax_and_output(int8_t* input, const int input_dim) {
             input[i] = OUTPUT32[i];
         }
     }
-    printf("Output 0 %.6f \n", OUTPUT32[0]);
-    printf("Output 1 %.6f \n", OUTPUT32[1]);
-    printf("Result 0 %d \n", input[0]);
-    printf("Result 1 %d \n", input[1]);
-    printf("Softmax and Output Done\n");
+    printf("\rOutput 0 %.6f \n", OUTPUT32[0]);
+    printf("\rOutput 1 %.6f \n", OUTPUT32[1]);
+    //printf("\rResult 0 %d \n", input[0]);
+    //printf("\rResult 1 %d \n", input[1]);
+    //printf("\rSoftmax and Output Done\n");
 }
