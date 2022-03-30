@@ -28,6 +28,7 @@ limitations under the License.
 #include "tensorflow/lite/schema/schema_generated.h"
 #include "tensorflow/lite/version.h"
 #include "mbed.h"
+#include <cstdint>
 
 // Globals, used for compatibility with Arduino-style sketches.
 namespace {
@@ -104,8 +105,10 @@ void setup() {
 
 // The name of this function is important for Arduino compatibility.
 void loop() {
-  //Timer t1;
-  //t1.start();
+
+//NO PERSON IMAGE DATA
+  Timer t1;
+  t1.start();
   // Get sample image from saved in header file (already preprocessed)
   for(int j=0; j< kMaxImageSize; j++){
     input->data.int8[j] = g_no_person_data[j];
@@ -115,8 +118,7 @@ void loop() {
   // for(int i=0; i<1000; i++){
   invoke_status = interpreter->Invoke();
   // }
-  // t1.stop();
-  // TF_LITE_REPORT_ERROR(error_reporter, "Invoke time: %d", static_cast<u_long>(t1.read_high_resolution_us())); 
+  
 
   if (invoke_status != kTfLiteOk) {
     TF_LITE_REPORT_ERROR(error_reporter, "Invoke failed");
@@ -132,5 +134,52 @@ void loop() {
   // RespondToDetection(error_reporter, person_score, no_person_score);
   // ### edited by yujie for sample input data
   TF_LITE_REPORT_ERROR(error_reporter, "Person_score: %d, No_person_score: %d\n", 
-                          static_cast<int>(output->data.uint8[kPersonIndex]), static_cast<int>(output->data.uint8[kNotAPersonIndex]));   
+        static_cast<int>(output->data.uint8[kPersonIndex]), static_cast<int>(output->data.uint8[kNotAPersonIndex]));
+  const int input_dim =2;
+  int input[input_dim]; 
+  input[0] = output->data.uint8[kPersonIndex];
+  input[1] = output->data.uint8[kNotAPersonIndex];
+  float OUTPUT32[input_dim];
+  float SOFTMAX[input_dim];
+  float softmax_sum = 0;
+  for (int i=0; i<input_dim; i++) {
+    if (input[i] < -128) {
+      input[i] = -128;
+    }
+    else if (input[i] > 127) {
+      input[i] = 127;
+    }
+    OUTPUT32[i] = input[i];
+    OUTPUT32[i] -= 3;
+    OUTPUT32[i] *= 0.038815176;
+    SOFTMAX[i] = exp(OUTPUT32[i]);
+    softmax_sum += SOFTMAX[i];
+    //printf("SOFTMAX[i] %.6f \n", SOFTMAX[i]);
+  }
+    //printf("softmax_sum %.6f \n", softmax_sum);
+  for (int i=0; i<input_dim; i++) {
+    OUTPUT32[i] = SOFTMAX[i]/softmax_sum;
+    if(i==0)
+      printf("\rProbability NO Person %.6f \n", OUTPUT32[i]);
+    if(i==1)
+      printf("\rProbability Person %.6f \n", OUTPUT32[i]);
+    OUTPUT32[i] = OUTPUT32[i]/0.00390625;
+    OUTPUT32[i] -= (int) 128;
+    if (OUTPUT32[i] < -128) {
+            //printf("Too small %d, %d \n", i, OUTPUT64[i]);
+      input[i] = -128;
+    }
+    else if (OUTPUT32[i] > 127) {
+            //printf("Too large %d \n", i);
+      input[i] = 127;
+    }
+    else{
+      input[i] = OUTPUT32[i];
+    }
+  }
+  printf("\rOutput 0 %.6f \n", OUTPUT32[0]);
+  printf("\rOutput 1 %.6f \n", OUTPUT32[1]);
+  t1.stop();
+  TF_LITE_REPORT_ERROR(error_reporter, "Invoke time: %d", static_cast<u_long>(t1.read_high_resolution_us())); 
+ 
 }

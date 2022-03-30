@@ -4,11 +4,15 @@
 #include "im2col.h"
 #include "combinedLayers.h"
 #include "weights.h"
+#include <time.h>
 
 
 //#include <inttypes.h>
 
 int main() {
+
+    clock_t start, end;
+    double cpu_time_used;
 
     int8_t WEIGHT_MATRIX1[WEIGHT_DIM1*CHANNELS1]= {-115,0,-127,16,-64,57,5,-55,-101,1,-107,-95,116,83,-57,71,-61,-3,19,13,-54,44,18,-29,-127,58,-108,59,-79,88,-11,-127,-126,-127,-120,-113,127,127,-72,3,46,69,-10,-127,-49,67,-108,-19,-1,60,-19,19,0,30,-79,-13,-24,-123,21,-54,10,50,-127,10,-7,62,-9,-41,-7,17,-126,-31};
     int8_t WEIGHT_MATRIX2[WEIGHT_DIM2*CHANNELS2]= {126,3,-54,26,-1,-14,118,-50,63,-120,16,-74,-13,15,55,-89,-80,4,-21,-89,0,-8,8,-127,-24,-6,42,-90,-11,34,127,-65,-53,-127,127,-96,127,127,22,-40,-105,-4,58,-85,-4,-2,35,-88,-56,17,-28,-127,-1,-20,33,-40,48,-31,-5,-54,-14,-25,-18,-71,-127,17,-13,-39,-1,-7,-51,-97};
@@ -184,7 +188,7 @@ int main() {
         //matrices used to store the results of a layer after the convolution
         int8_t OUTPUT_MATRIX_int8[48*48*16];//48x48x16
         //matrices used to store the flattend input after the im2col function (only for depthwise Conv Layers)
-
+        start = clock();
         input_conv_layer(OUTPUT_MATRIX_int8, IMAGE_PERSON, WEIGHT_MATRIX1, 1, CHANNELS1, 3, IMAGE_DIM, 0, 1, 0, 1, -2, bias1, multiply1, add1, shift1, 2);
         //printf("\rLayer 1 Done\n");
 
@@ -272,10 +276,13 @@ int main() {
         final_conv_layer(OUTPUT_MATRIX_int8,WEIGHT_MATRIX29, CHANNELS_IN29, CHANNELS_OUT29, 1, bias29, multiply29, add29,  shift29);
         //printf("\rLayer 29 Done\n");
 
-        printf("\routput at 0: %d \n",OUTPUT_MATRIX_int8[0]);
-        printf("\routput at 1: %d \n",OUTPUT_MATRIX_int8[1]);
+        //printf("\routput at 0: %d \n",OUTPUT_MATRIX_int8[0]);
+        //printf("\routput at 1: %d \n",OUTPUT_MATRIX_int8[1]);
 
         softmax_and_output(OUTPUT_MATRIX_int8,2);
+        end = clock();
+        cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+        printf("\rone inference took %f seconds to execute \n", cpu_time_used);
     }
     return 0;
 }

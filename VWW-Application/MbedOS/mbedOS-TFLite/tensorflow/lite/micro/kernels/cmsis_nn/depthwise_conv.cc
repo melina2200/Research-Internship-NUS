@@ -156,7 +156,7 @@ void EvalQuantizedPerChannel(TfLiteContext* context, TfLiteNode* node,
                              const TfLiteEvalTensor* filter,
                              const TfLiteEvalTensor* bias,
                              TfLiteEvalTensor* output) {
-  printf("EvalQuantizedPerChannel\r\n");
+  //printf("EvalQuantizedPerChannel\r\n");
   cmsis_nn_dw_conv_params dw_conv_params;
   dw_conv_params.dilation.h = params.dilation_height_factor;
   dw_conv_params.dilation.w = params.dilation_width_factor;
@@ -252,7 +252,7 @@ void EvalQuantizedPerChannel(TfLiteContext* context, TfLiteNode* node,
 }
 
 TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
-  printf("DSC --> Eval \r\n");
+  //printf("DSC --> Eval \r\n");
   TFLITE_DCHECK(node->user_data != nullptr);
   TFLITE_DCHECK(node->builtin_data != nullptr);
 

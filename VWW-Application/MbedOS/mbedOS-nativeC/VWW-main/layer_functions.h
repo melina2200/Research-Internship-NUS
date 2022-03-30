@@ -178,8 +178,8 @@ void softmax_and_output(int8_t* input, const int input_dim) {
             input[i] = OUTPUT32[i];
         }
     }
-    printf("\rOutput 0 %.6f \n", OUTPUT32[0]);
-    printf("\rOutput 1 %.6f \n", OUTPUT32[1]);
+    //printf("\rOutput 0 %.6f \n", OUTPUT32[0]);
+    //printf("\rOutput 1 %.6f \n", OUTPUT32[1]);
     //printf("\rResult 0 %d \n", input[0]);
     //printf("\rResult 1 %d \n", input[1]);
     //printf("\rSoftmax and Output Done\n");

@@ -64,7 +64,7 @@ static void depthwise_conv_s8_mult_4(const int8_t *input,
                                      const int32_t output_activation_min,
                                      const int32_t output_activation_max)
 {
-    printf("depthwise_conv_s8_mult_4\r\n");
+    //printf("depthwise_conv_s8_mult_4\r\n");
     for (int32_t in_h = -pad_y, out_h = 0, out_idx = 0; out_h < output_y; in_h += stride_y, ++out_h)
     {
         for (int32_t in_w = -pad_x, out_w = 0, ker_h_start = MAX(0, -in_h); out_w < output_x; in_w += stride_x, ++out_w)
