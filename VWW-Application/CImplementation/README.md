@@ -16,7 +16,7 @@ The main.c(main.c) script contains the functionally identical implementaion of t
 
 Use the following command to compile the script
 ```
-gcc -w main.c -o main -lm
+gcc -w main.c -o main -lm -lstdc++
 
 ./main
 ```
