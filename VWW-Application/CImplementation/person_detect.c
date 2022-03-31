@@ -5,6 +5,7 @@
 #include "weights.h"
 #include "im2col.h"
 #include "quant_params.h"
+#include "combinedLayers.h"
 
 //#include <math.h>
 //#include <inttypes.h>
@@ -68,7 +69,16 @@ int8_t INPUT_MATRIX9[3*3*WEIGHT_DIM24*CHANNELS_OUT23]; //3*3*9*128
 //layer 26
 int8_t INPUT_MATRIX10[3*3*WEIGHT_DIM26*CHANNELS_OUT25]; //3*3*9*256
 
+
+//inp channel 8
+//weight dim 3
+//inp dim 48
+//stride 1
+//pad 1,1,1,1,-128
+
+
 int main() {
+
     im2col(IMAGE_PERSON,1,IMAGE_DIM,IMAGE_DIM,3,2,INPUT_MATRIX1,0,1,0,1,-2); 
     conv_layer(INPUT_MATRIX1, WEIGHT_MATRIX1,CHANNELS1, WEIGHT_DIM1, 48*48, OUTPUT_MATRIX1, 1);
     quantize_conv_layer(OUTPUT_MATRIX1,WEIGHT_MATRIX1,CHANNELS1, WEIGHT_DIM1, 48*48,2);
@@ -76,11 +86,8 @@ int main() {
     requantize_conv(OUTPUT_MATRIX1,OUTPUT_MATRIX1_int8, 48*48, CHANNELS1, multiply1, add1, shift1, 0);
     printf("Layer 1 Done\n");
 
-    im2col(OUTPUT_MATRIX1_int8,CHANNELS1,48,48, 3, 1,INPUT_MATRIX2, 1,1,1,1,-128);
-    conv_layer(INPUT_MATRIX2, WEIGHT_MATRIX2,CHANNELS2, WEIGHT_DIM2, 48*48, OUTPUT_MATRIX1, CHANNELS1);
-    quantize_conv_layer(OUTPUT_MATRIX1,WEIGHT_MATRIX2,CHANNELS2, WEIGHT_DIM2, 48*48,128); 
-    add_bias(OUTPUT_MATRIX1, bias2,48*48, CHANNELS2);
-    requantize_conv(OUTPUT_MATRIX1,OUTPUT_MATRIX1_int8, 48*48, CHANNELS2, multiply2, add2, shift2, 0);
+
+    depthwise_conv_layer(OUTPUT_MATRIX1_int8, WEIGHT_MATRIX2, CHANNELS1, CHANNELS2, 3, 48, 1, 1, 1, 1, -128, bias2, multiply2, add2, shift2, 1);
     printf("Layer 2 Done\n");
 
     pointwise_conv_layer(OUTPUT_MATRIX1_int8, WEIGHT_MATRIX3,CHANNELS_IN3,CHANNELS_OUT3, 48*48, OUTPUT_MATRIX2);
