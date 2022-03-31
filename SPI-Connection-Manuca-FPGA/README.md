@@ -37,6 +37,25 @@ The following picture shows the setup. The exact PinMapping can be found in the 
 
 **(5)** In the future the mbed OS setup shall be changed such that the endianess can be set directly in the code and would make the python conversion script superfluous.
 
+**How to generate the binary**
+
+* Download [mbed studio](https://os.mbed.com/studio/) and the respective [compiler toolchain](https://os.mbed.com/docs/mbed-os/v6.15/build-tools/install-and-set-up.html). I used ARMC6 to generate the binary with mbedOS and GCC_ARM for the compilation in terminal.
+
+For the generation of the binary within the terminal use the following commands:
+
+The first command is used to set the current folder as the build folder.
+```
+mbed config root .
+```
+The next command will deploy the mbedOS folder. Make sure to change the PeripheralPins file as described above before compiling.
+```
+mbed deploy
+```
+Now compile the current script for Manuca Air (NUCLEO_L476RG) with the GCC compiler:
+```
+mbed compile -m NUCLEO_L476RG -t GCC_ARM
+```
+
 **Further References:**
 
 * [mbedOS SPI](https://os.mbed.com/docs/mbed-os/v6.15/apis/spi.html)
@@ -44,3 +63,4 @@ The following picture shows the setup. The exact PinMapping can be found in the 
 * [Datasheet KC705 Evaluation Board for the Kintex-7 FPGA](https://www.xilinx.com/support/documentation/boards_and_kits/kc705/ug810_KC705_Eval_Bd.pdf)
 * [DatasheetFMC XM105 Debug Card](https://www.xilinx.com/support/documentation/boards_and_kits/ug537.pdf)
 * [Datasheet QSPI Controller](https://www.micro-semiconductor.com/datasheet/f3-UMFT4222EV.pdf)
+* [ARM mbed OS 6](https://os.mbed.com/docs/mbed-os/v6.15/introduction/index.html)
