@@ -39,7 +39,13 @@ The model makes use of depthwise seperable convolution. In this process the 'nor
 
 
 ### Average Pooling
+The Average Pooling layer can be found at the end of the model. It is used to downsample the detection of features in a feature map. Here it is averaged over a 2x2 square in the feature map.
+
+![AvgPool](https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/averagePooling.png?raw=true)
 
 ### Softmax
+The Softmax layer is used as last activation function to normalize the logits/numbers output to a probability disctribution.
+
+![softmax](https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/softmax.png?raw=true)
 
 ### Quantization
