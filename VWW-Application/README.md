@@ -25,9 +25,21 @@ The [Person Detection Algorithm Excel File](Person_Detection_Algorithm.xlsx) con
 
 
 ## VWW Model
-The Visual Wake Word Model for Person Detection is based on the [MobileNets](https://arxiv.org/pdf/1704.04861.pdf) model and makes use of depthwise seperable convolution. In this process the 'normal' convolution is seperated in two convolution steps, the depthwise and the pointwise convolution. This separation divides a convolution kernel into two smaller kernels leading to a reduction in multiplications and therefore computational complexity. In the example given below instead of doing 3x3x3 = 27 multiplications we will now do 3x3 = 9 multiplications in the first step and them 3 in the second, leading to a total of 12 multiplications.
+The Visual Wake Word Model for Person Detection is based on the [MobileNets](https://arxiv.org/pdf/1704.04861.pdf) model. The following picture shows the layer structure of the 31 layers used in this model. 
+
+![LayerStructure](https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/layerStructure.png?raw=true)
+
+The model makes additionally use of qunatization to minimize computational complexity. In the following the layers used in the model will be described in depth.
+
+### Convolution (Depthwise and Pointwise)
+The model makes use of depthwise seperable convolution. In this process the 'normal' convolution is seperated in two convolution steps, the depthwise and the pointwise convolution. This separation divides a convolution kernel into two smaller kernels leading to a reduction in multiplications and therefore computational complexity. In the example given below instead of doing 3x3x3 = 27 multiplications we will now do 3x3 = 9 multiplications in the first step and them 3 in the second, leading to a total of 12 multiplications.
+
 
 ![SeparableConv](https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/separableConv.png?raw=true)
 
 
-**TODO**: Add detailed layer description of DepthwiseConv, AvgPooling, Softmax and describe Quantization
+### Average Pooling
+
+### Softmax
+
+### Quantization
