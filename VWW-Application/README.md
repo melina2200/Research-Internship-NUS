@@ -27,7 +27,7 @@ The [Person Detection Algorithm Excel File](Person_Detection_Algorithm.xlsx) con
 ## VWW Model
 The Visual Wake Word Model for Person Detection is based on the [MobileNets](https://arxiv.org/pdf/1704.04861.pdf) model. The following picture shows the layer structure of the 31 layers used in this model. 
 
-![LayerStructure](https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/layerStructure.png?raw=true)
+<img src="https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/layerStructure.png?raw=true" width="350">
 
 The model makes additionally use of qunatization to minimize computational complexity. In the following the layers used in the model will be described in depth.
 
