@@ -49,3 +49,12 @@ The Softmax layer is used as last activation function to normalize the logits/nu
 <img src="https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/softmax.png?raw=true" width="550">
 
 ### Quantization
+
+The model used in this project is fully quntized to 8-bit-integer variables. The parameters that stay constant after training and during inference (weights, bias,...) are directly quantized to int8 variables based on the largest and smallest float value:
+
+<img src="https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/int8Quant.png?raw=true" width="550">
+
+Activation values are different in each inference and can therefore not be quantized before the inference. After each layer a seperate quantization step will be done to make sure the resulting values during the matrix multiplication can be saved in an int8 format. For this step it is necessary to determine the parameters needed for the addition, multiplication and shift operation which are all part of the quantization step. These values are determined by running a few infernces (50-100 examples) such that the approximate range of the values can be assessed and the quantization parameters specified. This process is visualized in the following image:
+
+<img src="https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/int8QuantActivations.png?raw=true" width="550">
+
