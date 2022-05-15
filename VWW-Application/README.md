@@ -56,5 +56,5 @@ The model used in this project is fully quntized to 8-bit-integer variables. The
 
 Activation values are different in each inference and can therefore not be quantized before the inference. After each layer a seperate quantization step will be done to make sure the resulting values during the matrix multiplication can be saved in an int8 format. For this step it is necessary to determine the parameters needed for the addition, multiplication and shift operation which are all part of the quantization step. These values are determined by running a few infernces (50-100 examples) such that the approximate range of the values can be assessed and the quantization parameters specified. The process of quantization after one (e.g. convolution) layer is visualized in the following image. The quantization parameters are stored in int16 or int32 format.
 
-<img src="https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/int8QuantActivations.png?raw=true" width="550">
+<img src="https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/int8QuantActivations.png?raw=true" width="750">
 
