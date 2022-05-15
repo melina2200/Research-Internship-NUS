@@ -50,7 +50,7 @@ The Softmax layer is used as last activation function to normalize the logits/nu
 
 ### Quantization
 
-The model used in this project is fully quntized to 8-bit-integer variables. The parameters that stay constant after training and during inference (weights, bias,...) are directly quantized to int8 variables based on the largest and smallest float value:
+The model used in this project is fully quntized to 8-bit-integer variables. The parameters that stay constant after training and during inference (weights, bias,...) are directly quantized to int8 variables based on the largest and smallest float value. The following image shows a visualization of this prozess. The largest and smallest float vlaue (The values in this visualization are exemplary.) get mapped to 0 (samllest int8 value) and 255 (largest int8) value. The other values get mapped in between.
 
 <img src="https://github.com/melina2200/Research-Internship-NUS/blob/main/VWW-Application/img/int8Quant.png?raw=true" width="550">
 
