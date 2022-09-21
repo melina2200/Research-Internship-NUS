@@ -19,4 +19,6 @@ Now compile the current script for Manuca Board (NUCLEO_F767ZI) with the GCC com
 ```
 mbed compile -m NUCLEO_F767ZI -t GCC_ARM
 ```
+**How to modify the code**
 
+The entry point for the application is the [main.cc](tensorflow/lite/micro/examples/person_detection/main.cc) script. It calls the setup and loop function. The setup function initializes the model as well as the needed functions from the TFLite library to run the model. It builds an interpreter to run the model with and allocates memory to the TensorArena. The loop function loads the image to classify and evaluates it based on the ML model. It then displays the results.
