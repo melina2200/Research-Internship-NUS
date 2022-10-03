@@ -8,3 +8,8 @@
 
 
 This work is part of my internship within the [PACE project](https://blog.nus.edu.sg/paceaccelerator/) supervised by Prof. Tulika Mitra from National University of Singapore
+
+I presented a Poster at the DAC Young Fellow Forum 2022 in San Francisco, CA, USA:
+
+
+![I presented a Poster at the DAC Young Fellow Forum 2022 in San Francisco, CA, USA](2022-PosterFormatFellows-MS.png "DAC Young Fellow 2022 Poster")
